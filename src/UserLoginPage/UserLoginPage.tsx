@@ -112,7 +112,7 @@ export class LoginPage extends React.Component{
                            </Form.Group>
                            <Form.Group>
                                <Form.Label htmlFor="password">Password</Form.Label>
-                               <Form.Control type='password' id='password' value={this.state.password} onChange={(event: any) => this.formInputChanged(event)} onKeyDown={(key: KeyboardEvent) =>{if(key.code === 'Enter'){this.doLogin()}}}></Form.Control>
+                               <Form.Control type='password' id='password' value={this.state.password} onChange={(event: any) => this.formInputChanged(event)}></Form.Control>
                            </Form.Group>
                            <Form.Group>
                                <Button variant="primary" onClick={() => this.doLogin()}>Log in</Button>

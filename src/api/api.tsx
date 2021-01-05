@@ -18,13 +18,26 @@ export default function api(path: string, method: 'get' | 'post' | 'put' | 'patc
         };
 
         axios(requestData)
-        .then(res => responseHandler(res, resolve, requestData))
+        .then(res => responseHandler(res, resolve))
         .catch(err => {
-            console.log('Catch');
-            console.log(err + "Ovo je error");
-
-            if(err.statusCode === 400){
-                console.log('Pisa ti je mala')
+            if(err.resolve.status === 401){
+                console.log("status je 401");
+                const newToken = await refreshToken(requestData);
+    
+                if(!newToken){
+                    const response: ApiResponse = {
+                        status: 'login',
+                        data: null
+                    }
+    
+                    return resolve(response);
+                }
+                
+                saveToken(newToken);
+    
+                requestData.headers['Authorization'] = getToken();
+    
+                return await repeatRequest(requestData, resolve);
             }
 
             const response: ApiResponse = {
@@ -56,30 +69,10 @@ export function saveRefreshToken(token: string): void{
     localStorage.setItem('api_refresh_token', token)
 }
 
-async function responseHandler(res: AxiosResponse<any>, resolve: (value: ApiResponse) => void, requestData: AxiosRequestConfig){
+async function responseHandler(res: AxiosResponse<any>, resolve: (value: ApiResponse) => void){
     console.log('izvrsava se responseHandler....');
 
     if(res.status < 200 || res.status >= 300){
-
-        if(res.status === 401){
-            console.log("status je 401");
-            const newToken = await refreshToken(requestData);
-
-            if(!newToken){
-                const response: ApiResponse = {
-                    status: 'login',
-                    data: null
-                }
-
-                return resolve(response);
-            }
-            
-            saveToken(newToken);
-
-            requestData.headers['Authorization'] = getToken();
-
-            return await repeatRequest(requestData, resolve);
-        }
 
         const response: ApiResponse = {
             status: 'error',
