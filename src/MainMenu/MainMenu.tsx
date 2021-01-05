@@ -20,16 +20,16 @@ export class MainMenu extends React.Component<MainMenuPropertires>{
             items: props.items
         };
 
-        const intervalId = setInterval(() =>{
-            const novaLista = [...this.state.items];
-            novaLista.push(new MainMenuItem('/link', 'Naslov'));
-            this.setItems(novaLista);
+        // const intervalId = setInterval(() =>{
+        //     const novaLista = [...this.state.items];
+        //     novaLista.push(new MainMenuItem('/link', 'Naslov'));
+        //     this.setItems(novaLista);
 
-            if(this.counter > 2){
-                clearInterval(intervalId);
-            }
-            this.counter++;
-        }, 2000);
+        //     if(this.counter > 2){
+        //         clearInterval(intervalId);
+        //     }
+        //     this.counter++;
+        // }, 2000);
     }
 
     render(){

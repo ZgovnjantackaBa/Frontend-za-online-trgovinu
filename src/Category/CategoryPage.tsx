@@ -1,6 +1,6 @@
 import React from 'react';
 import {Container, Card} from 'react-bootstrap';
-import {faArchway, faArchive, faListAlt} from '@fortawesome/free-solid-svg-icons';
+import {faArchway, faListAlt} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import CategoryType from '../Types/CategoryType';
 
@@ -34,7 +34,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                     <Card.Body>
                         <Card.Title>
                         <FontAwesomeIcon icon={faListAlt}></FontAwesomeIcon>
-                            {this.state.category?.name}
+                             {this.state.category?.name}
                         </Card.Title>
                         <Card.Text>
                             Neki text
@@ -59,7 +59,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
     private getCatData(){
         setTimeout(() =>{
             const data: CategoryType = {
-                name: 'CategoryId' + this.props.match.params.id,
+                name: 'CategoryId ' + this.props.match.params.id,
                 categoryId: this.props.match.params.id,
                 items: []
             };

@@ -15,7 +15,7 @@ import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
 
 import { MainMenu, MainMenuItem } from './MainMenu/MainMenu';
 import { ContactPage } from './ContactPage/ContactPage';
-import { LoginPage } from './LoginPage/LoginPage';
+import { LoginPage } from './UserLoginPage/UserLoginPage';
 import { AboutUsPage } from './AboutUsPage/AboutUsPage';
 import CategoryPage from './Category/CategoryPage';
 
