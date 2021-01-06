@@ -18,12 +18,14 @@ import { ContactPage } from './ContactPage/ContactPage';
 import { LoginPage } from './UserLoginPage/UserLoginPage';
 import { AboutUsPage } from './AboutUsPage/AboutUsPage';
 import CategoryPage from './Category/CategoryPage';
+import { UserRegistrationPage } from './UserRegistrationPage/UserRegistrationPage';
 
 const menuItems = [
     new MainMenuItem("", "Home"),
     new MainMenuItem("contact", "Contact"),
     new MainMenuItem("aboutUs", "About us"),
     new MainMenuItem('login', "Log in"),
+    new MainMenuItem('registration', 'User registration'),
     new MainMenuItem('/category/1', 'Cat1'),
     new MainMenuItem('/category/7', 'Cat7'),
     new MainMenuItem('/category/21', 'Cat21')
@@ -38,6 +40,7 @@ ReactDOM.render(
         <Route path='/contact' component={ContactPage}></Route>
         <Route path='/login' component={LoginPage}></Route>
         <Route path='/aboutUs' component={AboutUsPage}></Route>
+        <Route path='/registration' component={UserRegistrationPage}></Route>
         <Route path='/category/:id' component={ CategoryPage}/>
       </Switch>
     </HashRouter>

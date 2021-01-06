@@ -59,7 +59,7 @@ export class LoginPage extends React.Component{
         }).then((res: ApiResponse) =>{
 
             if(res.status === 'error'){
-                this.setErrorMessage("You made input misstake, try again!");
+                this.setErrorMessage("You made an input misstake, try again!");
 
                 return;
             }
@@ -72,11 +72,9 @@ export class LoginPage extends React.Component{
                     switch (res.data.statusCode) {
                         case -3001:
                             message = "Unknown email";
-                            console.log(message);
                             break;
                         case -3002:
                             message = "Bad password";
-                            console.log(message);
                             break;
                     }
 
@@ -86,7 +84,6 @@ export class LoginPage extends React.Component{
 
                 saveToken(res.data.token);
                 saveRefreshToken(res.data.refreshToken);
-                console.log("Prije true neka greska");
 
                 this.setLogginState(true);
             }
@@ -102,7 +99,7 @@ export class LoginPage extends React.Component{
     return (
         <Container>
             <Card bg="light" text="dark">
-                <Card.Header><FontAwesomeIcon icon={faSignInAlt}></FontAwesomeIcon> Log in</Card.Header>
+                <Card.Header><FontAwesomeIcon icon={faSignInAlt}></FontAwesomeIcon> Logg in</Card.Header>
                 <Card.Body>
                    <Col md={ {span: 6, offset: 3} }>
                        <Form>

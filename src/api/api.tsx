@@ -11,34 +11,15 @@ export default function api(path: string, method: 'get' | 'post' | 'put' | 'patc
             baseURL: ApiConfig.API_URL,
             data: JSON.stringify(body),
             headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                'Authorization': getToken(),
-                "Access-Control-Allow-Origin": "*",
-            }
+                'Content-Type': 'application/json',
+                'Authorization': getToken()            }
         };
 
         axios(requestData)
         .then(res => responseHandler(res, resolve))
-        .catch(err => {
-            if(err.resolve.status === 401){
-                console.log("status je 401");
-                const newToken = await refreshToken(requestData);
-    
-                if(!newToken){
-                    const response: ApiResponse = {
-                        status: 'login',
-                        data: null
-                    }
-    
-                    return resolve(response);
-                }
-                
-                saveToken(newToken);
-    
-                requestData.headers['Authorization'] = getToken();
-    
-                return await repeatRequest(requestData, resolve);
-            }
+        .catch(async err => {
+   
+            console.log(requestData.data);
 
             const response: ApiResponse = {
                 status: 'error',
@@ -70,7 +51,6 @@ export function saveRefreshToken(token: string): void{
 }
 
 async function responseHandler(res: AxiosResponse<any>, resolve: (value: ApiResponse) => void){
-    console.log('izvrsava se responseHandler....');
 
     if(res.status < 200 || res.status >= 300){
 
@@ -104,9 +84,9 @@ export interface ApiResponse{
     data: any;
 }
 
-async function refreshToken(requestData: AxiosRequestConfig): Promise<string | null>{
+async function refreshToken(): Promise<string | null>{
 
-    const path = '/user/refresh';
+    const path = 'auth/user/refresh';
     const data = {
         token: getRefreshtoken()
     };
