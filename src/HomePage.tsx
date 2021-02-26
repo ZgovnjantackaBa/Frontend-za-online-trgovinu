@@ -1,21 +1,111 @@
 import React from 'react';
-import { Container, Card} from 'react-bootstrap';
-import {faHome, faAnchor} from '@fortawesome/free-solid-svg-icons';
+import { Container, Card, Row, Col} from 'react-bootstrap';
+import {faListAlt} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import CategoryType from './Types/CategoryType';
+import { Redirect, Link } from 'react-router-dom';
+import api, {ApiResponse} from './api/api';
 
-function HomePage() {
-  return (
+interface HomePageState{
+  items?: CategoryType[];
+  isLoggedIn: boolean;
+}
+
+interface ApiCategoryDto{
+  categoryId: number;
+  name: string;
+}
+
+export default class HomePage extends React.Component{
+
+state: HomePageState;
+
+constructor(props: Readonly<{}>){
+  super(props);
+
+  this.state = {
+    isLoggedIn: true
+  }
+}
+
+componentWillMount(){
+  this.getCategories();
+}
+
+private getCategories(){
+  api('api/category/?filter=parent__category_id||$isnull', 'get', {}).then((res: ApiResponse) =>{
+    if(res.status === 'error' || res.status === 'login'){
+        this.setIsLoggedIn(false);
+        return;
+    }
+    this.putCategoriesInState(res.data);
+  });
+}
+
+private putCategoriesInState(data: ApiCategoryDto[]){
+  const cats: CategoryType[] = data.map(cat =>{
+    return {
+      categoryId: cat.categoryId,
+      name: cat.name,
+      items: []
+    };
+  });
+
+  const newState = Object.assign(this.state, {
+    items: cats
+  });
+
+  this.setState(newState);
+}
+
+private setIsLoggedIn(is: boolean){
+  const newState = Object.assign(this.state, {
+    isLoggedIn: is
+  });
+
+  this.setState(newState);
+}
+
+private renderCategoryCard(category: CategoryType){
+  return(
+  <Col lg="3" md="4" sm="6" xs="12">
+    <Card>
+      <Card.Body>
+        <Card.Title>
+          {category.name}
+        </Card.Title>
+        <Link to={`category/${category.categoryId}`} className="btn btn-primary btn-block btn-sm"> Open category </Link>
+      </Card.Body>
+    </Card>
+  </Col>);
+}
+
+
+render(){
+
+  if(this.state.isLoggedIn === false){
+    <Redirect to="user/login"></Redirect>
+  }
+
+  return(
     <Container>
-      <Card bg="primary" text="white">
-        <Card.Header><FontAwesomeIcon icon={faAnchor}></FontAwesomeIcon> Neki naslov</Card.Header>
-        <Card.Body>
-          <Card.Text>
-            <FontAwesomeIcon icon={faHome}></FontAwesomeIcon>   Home
-          </Card.Text>
-        </Card.Body>
-      </Card>
+      <Card.Header>
+        <FontAwesomeIcon icon={faListAlt}></FontAwesomeIcon> Top level categories
+      </Card.Header>
+      <Card.Body>
+        <Row>
+          {this.state.items?.map(this.renderCategoryCard)}
+        </Row>
+      </Card.Body>
     </Container>
   );
 }
 
-export default HomePage;
+}
+
+/*
+
+  const image = 'src\Category\profesori.jpg';
+  const image2 = 'profesori.jpg';
+  style={{ color: "#fff", background: `url(${image2})`,}}
+*/

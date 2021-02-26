@@ -79,8 +79,20 @@ export class UserRegistrationPage extends React.Component{
         api('auth/user/register',
         'put',
         data).then((res: ApiResponse) =>{
+
             if(res.status === 'error'){
-                this.setMessage("You made an input misstake, try again!");
+                let message = '';
+
+                switch(res.data.statusCode){
+                    case -3001: message = 'Used email';
+                    break;
+                    case -3002: message = 'Bad password'
+                    break;
+                    case -6001: message = 'This acc already exists';
+                    break;
+                    default: message = "System error, try again..."
+                }
+                this.setMessage(message);
 
                 return;
             }
@@ -106,34 +118,52 @@ export class UserRegistrationPage extends React.Component{
                 <Card.Body>
                    <Col md={ {span: 9, offset: 2} }>
                        <Form>
+                           <Row>
                                 <Form.Group>
                                     <Form.Label htmlFor="email">E-mail</Form.Label>
                                     <Form.Control type='email' id='email' value={this.state.formData.email} onChange={(event: any) => this.formInputChanged(event)}></Form.Control>
                                 </Form.Group>
+                            </Row>
+                            <Row>
+                                <Col md={3}>
                                 <Form.Group>
                                     <Form.Label htmlFor="password">Password</Form.Label>
                                     <Form.Control type='password' id='password' value={this.state.formData.password} onChange={(event: any) => this.formInputChanged(event)}></Form.Control>
                                 </Form.Group>
+                                </Col>
+                                <Col md={3}>
                                 <Form.Group>
                                     <Form.Label htmlFor="password">Repeat password</Form.Label>
                                     <Form.Control type='password' id='repeatPass' value={this.state.repeatPass} onChange={(event: any) => this.formInputChanged(event)}></Form.Control>
                                 </Form.Group>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={3}>
                                <Form.Group>
                                    <Form.Label>Forename</Form.Label>
                                    <Form.Control type="text" id="forename" value={this.state.formData.forename} onChange={(event: any) => this.formInputChanged(event)}></Form.Control>
                                </Form.Group>
+                               </Col>
+                               <Col md={3}>
                                <Form.Group>
                                    <Form.Label>Surname</Form.Label>
                                    <Form.Control type="text" id="surname" value={this.state.formData.surname} onChange={(event: any) => this.formInputChanged(event)}></Form.Control>
                                </Form.Group>
+                               </Col>
+                            </Row>
+                            <Row>
                                <Form.Group>
                                    <Form.Label>phoneNumber</Form.Label>
                                    <Form.Control type="phone" id="phoneNumber" value={this.state.formData.phoneNumber} onChange={(event: any) => this.formInputChanged(event)}></Form.Control>
                                </Form.Group>
+                            </Row>
+                            <Row>
                                <Form.Group>
                                    <Form.Label>Postal address</Form.Label>
-                                   <Form.Control type="textarea" id="postalAddress" value={this.state.formData.postalAddress} onChange={(event: any) => this.formInputChanged(event)}></Form.Control>
+                                   <Form.Control type="address" as="textarea" id="postalAddress" value={this.state.formData.postalAddress} onChange={(event: any) => this.formInputChanged(event)}></Form.Control>
                                </Form.Group>
+                            </Row>
                            <Form.Group>
                                <Button variant="primary" onClick={() => this.registerUser()}>Register</Button>
                            </Form.Group>

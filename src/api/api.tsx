@@ -19,8 +19,6 @@ export default function api(path: string, method: 'get' | 'post' | 'put' | 'patc
         .then(res => responseHandler(res, resolve))
         .catch(async err => {
    
-            console.log(requestData.data);
-
             const response: ApiResponse = {
                 status: 'error',
                 data: err
