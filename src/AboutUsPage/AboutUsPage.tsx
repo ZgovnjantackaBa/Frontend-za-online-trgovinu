@@ -8,7 +8,7 @@ export class AboutUsPage extends React.Component{
     render() {
     return (
         <Container>
-            <Card bg="danger" text="warning">
+            <Card bg="dark" text="white">
                 <Card.Header>
                     <FontAwesomeIcon icon={faPhone}></FontAwesomeIcon> Kontaktirajte nas
                 </Card.Header>

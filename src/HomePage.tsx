@@ -68,27 +68,29 @@ private setIsLoggedIn(is: boolean){
 
 private renderCategoryCard(category: CategoryType){
   return(
-  <Col lg="3" md="4" sm="6" xs="12">
-    <Card>
-      <Card.Body>
-        <Card.Title>
-          {category.name}
-        </Card.Title>
-        <Link to={`category/${category.categoryId}`} className="btn btn-primary btn-block btn-sm"> Open category </Link>
-      </Card.Body>
-    </Card>
-  </Col>);
+    <Col lg="3" md="4" sm="6" xs="12">
+      <Card>
+        <Card.Body>
+          <Card.Title>
+            {category.name}
+          </Card.Title>
+          <Link to={`category/${category.categoryId}`} className="btn btn-primary btn-block btn-sm"> Open category </Link>
+        </Card.Body>
+      </Card>
+    </Col>
+  );
 }
 
 
 render(){
 
   if(this.state.isLoggedIn === false){
-    <Redirect to="user/login"></Redirect>
+    <Redirect to="/login"></Redirect>
   }
 
   return(
     <Container>
+      <Card bg="dark" text="primary">
       <Card.Header>
         <FontAwesomeIcon icon={faListAlt}></FontAwesomeIcon> Top level categories
       </Card.Header>
@@ -97,6 +99,7 @@ render(){
           {this.state.items?.map(this.renderCategoryCard)}
         </Row>
       </Card.Body>
+      </Card>
     </Container>
   );
 }

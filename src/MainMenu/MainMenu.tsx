@@ -1,6 +1,7 @@
 import React from 'react';
-import { Nav } from 'react-bootstrap';
+import { Container, Nav } from 'react-bootstrap';
 import { Link, HashRouter} from 'react-router-dom';
+import CartPage from '../Cart/CartPage';
 
 export class MainMenu extends React.Component<MainMenuPropertires>{
 
@@ -32,19 +33,24 @@ export class MainMenu extends React.Component<MainMenuPropertires>{
         // }, 2000);
     }
 
+    private makeNavLink(item: MainMenuItem) {
+        return (
+            <Link to={ item.link } className="nav-link" key={ item.text }>
+                { item.text }
+            </Link>
+        );
+    }
+
     render(){
         return(
-            <Nav variant="tabs">
-                {
-                    this.state.items.map(item =>{
-                        return(
-                                <HashRouter>
-                                    <Link to={item.link} className="nav-link">{item.text}</Link>
-                                </HashRouter>
-                            );
-                    })
-                }
-            </Nav>
+            <Container>
+                <Nav variant="tabs">
+                    <HashRouter>
+                        {this.state.items.map(this.makeNavLink)}
+                        <CartPage/>
+                    </HashRouter>
+                </Nav>
+            </Container>
         );
     }
 }

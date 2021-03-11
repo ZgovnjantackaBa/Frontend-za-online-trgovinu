@@ -98,7 +98,7 @@ export class LoginPage extends React.Component{
         }
     return (
         <Container>
-            <Card bg="light" text="dark">
+            <Card bg="dark" text="light">
                 <Card.Header><FontAwesomeIcon icon={faSignInAlt}></FontAwesomeIcon> Logg in</Card.Header>
                 <Card.Body>
                    <Col md={ {span: 6, offset: 3} }>

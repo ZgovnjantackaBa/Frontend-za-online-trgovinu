@@ -113,7 +113,7 @@ export class UserRegistrationPage extends React.Component{
         }
         return(
             <Container>
-            <Card bg="light" text="dark">
+            <Card bg="dark" text="light">
                 <Card.Header><FontAwesomeIcon icon={faAnchor}></FontAwesomeIcon> Sign up</Card.Header>
                 <Card.Body>
                    <Col md={ {span: 9, offset: 2} }>

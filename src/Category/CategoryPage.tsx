@@ -7,6 +7,7 @@ import api, { ApiResponse } from '../api/api';
 import ArticleType from '../Types/ArticleType';
 import { Link, Redirect } from 'react-router-dom';
 import { ApiConfig } from '../config/ApiConfig';
+import SingleArticlePreview from '../SingleArticlePreview/SingleArticlePreview';
 
 interface CategoryPageProperties{
     match: {
@@ -27,7 +28,16 @@ interface CategoryPageState{
         priceMin: number;
         priceMax: number;
         order: "name asc" | "name desc" | "price asc" | "price desc";
-    }
+        selectedFeatures: {
+            featureId: number;
+            value: string;
+        }[];
+    };
+    features: {
+        featureId: number;
+        name: string;
+        values: string[];
+    }[];
 }
 
 interface CategoryDto{
@@ -62,8 +72,10 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                 keywords: "",
                 priceMin: 0.01,
                 priceMax: 100000,
-                order: "price asc"
-            }
+                order: "price asc",
+                selectedFeatures: []
+            },
+            features: []
         };
     }
 
@@ -113,6 +125,20 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
 
         const newState = Object.assign(this.state, {
             category: categoryData
+        })
+
+        this.setState(newState);
+    }
+
+    private setFeatures(features: {featureID: number; name: string; values: string[];}){
+        const newState = Object.assign(this.state, { features: features });
+
+        this.setState(newState);
+    }
+
+    private setSelectedFeatures(features: {featureId: number, value: string}[]){
+        const newState = Object.assign(this.state.filters, {
+            selectedFeatures: features
         })
 
         this.setState(newState);
@@ -181,6 +207,8 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                     <option value="price desc">Sort by price - desc</option>
                 </Form.Control>
             </Form.Group>
+            <h2>Features</h2>
+            {this.state.features.map(component => this.printFeatureFilterComponent(component))}
             <Form.Group>
                 <Button variant="primary" block onClick={(e) => this.applyFilters()}><FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>Search</Button>
             </Form.Group>
@@ -214,6 +242,37 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
 
     private filterOrderChanged(event: React.ChangeEvent<HTMLSelectElement>){
         this.setNewFilter(Object.assign(this.state.filters, { order: event.target.value }));
+    }
+
+    private featureFilterChanged(event: React.ChangeEvent<HTMLInputElement>){
+        
+        const featureId = event.target.dataset.featureId;
+        const value = event.target.value;
+
+        if(event.target.checked){
+            this.addFeatureFilterValue(Number(featureId), value);
+        }else{
+            this.removeFeatureFilterValue(Number(featureId), value);
+        }
+    }
+
+    private addFeatureFilterValue(featureId: number, value: string){
+        
+        const newSelectedFeature = [...this.state.filters.selectedFeatures];
+        newSelectedFeature.push({
+            featureId: featureId,
+            value: value
+        });
+
+        this.setSelectedFeatures(newSelectedFeature);
+    }
+
+    private removeFeatureFilterValue(featureId: number, value: string){
+        const newSelectedFeatures = this.state.filters.selectedFeatures.filter(record => {
+            return !(record.featureId === featureId && record.value === value);
+        });
+
+        this.setSelectedFeatures(newSelectedFeatures);
     }
 
     componentWillMount(){
@@ -259,12 +318,33 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         const orderBy = orderParts[0];
         const orderDirection = orderParts[1].toUpperCase();
 
+        const featureFilters: any[] = [];
+        
+        for(const item of this.state.filters.selectedFeatures){
+
+            let found = false;
+            let foundRef = null;
+            
+            for(const featureFilter of featureFilters){
+                if(featureFilter.featureId ===  item.featureId){
+                    found = true;
+                    foundRef = featureFilter;
+                    break;
+                }
+            }
+            if(!found){
+                featureFilters.push({featureId: item.featureId, value: [item.value]});
+            }else{
+                foundRef.value.push(item.value);
+            }
+        }
+
         api('/api/article/search', 'post', {
             categoryId: this.props.match.params.id,
             keywords: this.state.filters.keywords,
             priceMin: this.state.filters.priceMin,
             priceMax: this.state.filters.priceMax,
-            features: [],
+            features: featureFilters,
             orederBy: orderBy,
             orderDirection: orderDirection
         }).then((res: ApiResponse) =>{
@@ -299,6 +379,24 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
 
             this.setArticles(articles);
         });
+
+        this.getFeatures();
+    }
+
+    private getFeatures(){
+        api('api/feature/values/' + this.props.match.params.id, 'get', {})
+        .then((res: ApiResponse) =>{
+
+            if(res.status === 'login'){
+                return this.setLogginState(false);
+            }
+
+            if(res.status === 'error'){
+                return this.setMessage('Try to refresh page, we have an error there');
+            }
+
+            this.setFeatures(res.data.features);
+        })
     }
 
     componentDidMount(){
@@ -348,21 +446,22 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
 
     private singleArticle(article: ArticleType){
         return(
-            <Col lg="4" md="6" sm="6" xs="12">
-                <Card className="mb-3">
-                    <Card.Header>
-                        {/* <img alt={article.name} src={ApiConfig.PHOTO_PATH + "small/" + article.imageUrl}></img> */}
-                        <CardImg width="100%" src={ApiConfig.PHOTO_PATH + "small/" + article.imageUrl} alt={article.name} />
-                    </Card.Header>
-                    <Card.Body>
-                        <Card.Title as="p">{article.name}</Card.Title>
-                        <Card.Text>{article.excerpt}</Card.Text>
-                        <Card.Text>Price: {article.price} EUR</Card.Text>
-                        <Card.Text>{article.description}</Card.Text>
-                        <Link to={`/article/${article.articleId}`} className="btn btn-primary btn-block  btn-sm">Open article page...</Link>
-                    </Card.Body>
-                </Card>
-            </Col>
+            <SingleArticlePreview article={article}></SingleArticlePreview>
+        );
+    }
+
+    private printFeatureFilterComponent(component: { featureId: number; name: string; values: string[]; }){
+
+        return(
+            <Form.Group>
+                <Form.Label><strong>{component.name}</strong></Form.Label>
+                {
+                    component.values.map(value => {
+                       return(<Form.Check value={value} label={value} type="checkbox" data-feature-id={component.featureId}
+                       onChange={(e) => this.featureFilterChanged(e as any)}></Form.Check>); 
+                    })
+                }
+            </Form.Group>
         );
     }
 

@@ -19,6 +19,7 @@ import { LoginPage } from './UserLoginPage/UserLoginPage';
 import { AboutUsPage } from './AboutUsPage/AboutUsPage';
 import CategoryPage from './Category/CategoryPage';
 import { UserRegistrationPage } from './UserRegistrationPage/UserRegistrationPage';
+import { OrderPage } from './OrderPage/OrderPage';
 
 const menuItems = [
     new MainMenuItem("", "Home"),
@@ -26,6 +27,7 @@ const menuItems = [
     new MainMenuItem("aboutUs", "About us"),
     new MainMenuItem('login', "Log in"),
     new MainMenuItem('registration', 'User registration'),
+    new MainMenuItem('user/orders', "My orders")
 ]
 
 ReactDOM.render(
@@ -39,6 +41,7 @@ ReactDOM.render(
         <Route path='/aboutUs' component={AboutUsPage}></Route>
         <Route path='/registration' component={UserRegistrationPage}></Route>
         <Route path='/category/:id' component={ CategoryPage}/>
+        <Route path='/user/orders' component={OrderPage}></Route>
       </Switch>
     </HashRouter>
   </React.StrictMode>,
