@@ -4,6 +4,7 @@ import React from 'react';
 import { Button, Container, Card, Form, Alert, Col, Row } from 'react-bootstrap';
 import { Link } from "react-router-dom"
 import api, { ApiResponse } from '../api/api'
+import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 
 
 interface UserRegistrationPageState{
@@ -113,6 +114,7 @@ export class UserRegistrationPage extends React.Component{
         }
         return(
             <Container>
+            <RoledMainMenu role='visitor'/>
             <Card bg="dark" text="light">
                 <Card.Header><FontAwesomeIcon icon={faAnchor}></FontAwesomeIcon> Sign up</Card.Header>
                 <Card.Body>

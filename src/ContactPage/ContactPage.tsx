@@ -3,6 +3,7 @@ import { Container, Button, Card, Form} from 'react-bootstrap';
 import {faHeading, faStore} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import axios, { AxiosRequestConfig } from "axios";
+import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 
 interface HackTheBoxinfo{
   data?: any;
@@ -42,6 +43,7 @@ export class ContactPage extends React.Component{
   render() {
     return (
         <Container>
+          <RoledMainMenu role='user'/>
             <Card bg="dark" text="danger">
               <Card.Header><FontAwesomeIcon icon={faHeading}></FontAwesomeIcon> Neki naslov</Card.Header>
                <Card.Body>

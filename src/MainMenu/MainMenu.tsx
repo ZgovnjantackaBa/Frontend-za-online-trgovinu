@@ -43,14 +43,12 @@ export class MainMenu extends React.Component<MainMenuPropertires>{
 
     render(){
         return(
-            <Container>
                 <Nav variant="tabs">
                     <HashRouter>
                         {this.state.items.map(this.makeNavLink)}
-                        <CartPage/>
+                        {this.props.showCart ? <CartPage/> : ''}
                     </HashRouter>
                 </Nav>
-            </Container>
         );
     }
 }
@@ -67,6 +65,7 @@ export class MainMenuItem{
 
 interface MainMenuPropertires{
     items: MainMenuItem[];
+    showCart?: boolean;
 }
 
 interface MainMenuState{

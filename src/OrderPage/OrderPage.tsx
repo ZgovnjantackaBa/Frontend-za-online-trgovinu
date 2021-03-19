@@ -4,6 +4,7 @@ import React from "react";
 import { Button, Card, Container, Modal, Table } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
 import api, { ApiResponse } from "../api/api";
+import RoledMainMenu from "../RoledMainMenu/RoledMainMenu";
 import CartType from "../Types/CartType";
 import OrderType from "../Types/OrderType";
 
@@ -63,7 +64,7 @@ export class OrderPage extends React.Component{
     private setLogginState(isLogged: boolean){
         this.setState(Object.assign(this.state, {
             isLoggedIn: isLogged
-        }))
+        }));
     }
 
     private setOrdersState(orders: OrderType[]){
@@ -129,7 +130,8 @@ export class OrderPage extends React.Component{
 
         return(
             <Container>
-                <Card>
+                <RoledMainMenu role='user'/>
+                <Card bg="white" text="primary">
                     <Card.Title><FontAwesomeIcon icon={faBox}></FontAwesomeIcon></Card.Title>
                     <Card.Body>
                 <Table hover size="sm">
@@ -171,9 +173,9 @@ export class OrderPage extends React.Component{
                                 <tr>
                                     <td>{item.article.category.name}</td>
                                     <td>{item.article.name}</td>
-                                    <td>{item.article.articleId}</td>
-                                    <td>{Number(item.article.articlePrices[item.article.articlePrices.length - 1].price).toFixed(2)} Eur</td>
-                                    <td>{Number(item.article.articlePrices[item.article.articlePrices.length - 1].price * item.quantity).toFixed(2)} Eur</td>
+                                    <td>{item.quantity}</td>
+                                    <td>{Number(this.getLatestPriceBeforeDate(item.article, this.state.cart?.createdAt).price).toFixed(2)} Eur</td>
+                                    <td>{Number(this.getLatestPriceBeforeDate(item.article, this.state.cart?.createdAt).price * item.quantity).toFixed(2)} Eur</td>
                                 </tr>
                             );
                         }, this)}
@@ -239,7 +241,7 @@ export class OrderPage extends React.Component{
         } else {
             for (const item of this.state.cart?.cartArticles) {
                 let price = this.getLatestPriceBeforeDate(item.article, this.state.cart.createdAt);
-                sum += price.price * item.quantity;
+                sum += price.price * Number(item.quantity);
             }
         }
 

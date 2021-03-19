@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ApiConfig } from '../config/ApiConfig';
 
-export default function api(path: string, method: 'get' | 'post' | 'put' | 'patch' | 'delete', body: any | undefined){
+export default function api(path: string, method: 'get' | 'post' | 'put' | 'patch' | 'delete', body: any | undefined, role: 'user' | 'administrator' = 'user'){
 
     return new Promise<ApiResponse>((resolve) => {
         
@@ -12,7 +12,7 @@ export default function api(path: string, method: 'get' | 'post' | 'put' | 'patc
             data: JSON.stringify(body),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': getToken()            }
+                'Authorization': getToken(role)            }
         };
 
         axios(requestData)
@@ -30,22 +30,22 @@ export default function api(path: string, method: 'get' | 'post' | 'put' | 'patc
     
 }
 
-function getToken(): string{
-    const token = localStorage.getItem('api_token');
+function getToken(role: 'user' | 'administrator'): string{
+    const token = localStorage.getItem('api_token' + role);
     return 'Berer ' + token;
 }
 
-export function saveToken(token: string): void{
-    localStorage.setItem('api_token', token)
+export function saveToken(token: string, role: 'user' | 'administrator'): void{
+    localStorage.setItem('api_token' + role, token)
 }
 
-function getRefreshtoken(): string{
-    const token = localStorage.getItem('api_refresh_token');
+function getRefreshtoken(role: 'user' | 'administrator'): string{
+    const token = localStorage.getItem('api_refresh_token' + role);
     return token + '';
 }
 
-export function saveRefreshToken(token: string): void{
-    localStorage.setItem('api_refresh_token', token)
+export function saveRefreshToken(token: string, role: 'user' | 'administrator'): void{
+    localStorage.setItem('api_refresh_token' + role, token)
 }
 
 async function responseHandler(res: AxiosResponse<any>, resolve: (value: ApiResponse) => void){
@@ -82,11 +82,11 @@ export interface ApiResponse{
     data: any;
 }
 
-async function refreshToken(): Promise<string | null>{
+async function refreshToken(role: 'user' | 'administrator'): Promise<string | null>{
 
-    const path = 'auth/user/refresh';
+    const path = 'auth/' + role + '/refresh';
     const data = {
-        token: getRefreshtoken()
+        token: getRefreshtoken(role)
     };
 
     const refreshTokenRequestData: AxiosRequestConfig = {
@@ -108,6 +108,26 @@ async function refreshToken(): Promise<string | null>{
 
     return refreshTokenResponse.data.token;
 
+}
+
+export function saveIdentity(identity: string, role: "user" | "administrator"){
+    localStorage.setItem('api_identity' + role, identity);
+}
+
+export function getIdentity(role: "user" | "administrator"): string{
+    const item = localStorage.getItem('api_identity' + role);
+
+    return item + '';
+}
+
+export function saveId(iDAsString: string, role: "user" | "administrator"){
+    localStorage.setItem('api_id' + role, iDAsString);
+}
+
+export function getId(role: "user" | "administrator"): string{
+    const item = localStorage.getItem('api_id' + role);
+
+    return item + '';
 }
 
 async function repeatRequest(requestData: AxiosRequestConfig, resolve: (value: ApiResponse) => void){

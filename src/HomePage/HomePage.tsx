@@ -2,9 +2,10 @@ import React from 'react';
 import { Container, Card, Row, Col} from 'react-bootstrap';
 import {faListAlt} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import CategoryType from './Types/CategoryType';
+import CategoryType from '../Types/CategoryType';
 import { Redirect, Link } from 'react-router-dom';
-import api, {ApiResponse} from './api/api';
+import api, {ApiResponse} from '../api/api';
+import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 
 interface HomePageState{
   items?: CategoryType[];
@@ -34,10 +35,9 @@ componentWillMount(){
 
 private getCategories(){
   api('api/category/?filter=parent__category_id||$isnull', 'get', {}).then((res: ApiResponse) =>{
-    if(res.status === 'error' || res.status === 'login'){
-        this.setIsLoggedIn(false);
-        return;
-    }
+    if (res.status === 'error' || res.status === 'login') {
+      return this.setIsLoggedIn(false);
+  }
     this.putCategoriesInState(res.data);
   });
 }
@@ -85,11 +85,14 @@ private renderCategoryCard(category: CategoryType){
 render(){
 
   if(this.state.isLoggedIn === false){
-    <Redirect to="/login"></Redirect>
+    return(
+    <Redirect to="/user/login" />
+    );
   }
 
   return(
     <Container>
+      <RoledMainMenu role='user'/>
       <Card bg="dark" text="primary">
       <Card.Header>
         <FontAwesomeIcon icon={faListAlt}></FontAwesomeIcon> Top level categories

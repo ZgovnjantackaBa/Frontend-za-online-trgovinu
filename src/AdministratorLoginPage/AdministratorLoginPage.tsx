@@ -2,26 +2,26 @@ import React from 'react';
 import { Container, Card, Col, Form, Button, Alert} from 'react-bootstrap';
 import {faSignInAlt} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import api, {ApiResponse, saveToken, saveRefreshToken} from '../api/api'
+import api, {ApiResponse, saveToken, saveRefreshToken, saveIdentity, saveId} from '../api/api'
 import { Redirect } from "react-router-dom"
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 
-interface UserLoginPageState{
-    email: string;
+interface AdministratorLoginPageState{
+    username: string;
     password: string;
     errorMessage: string;
     isLoggedIn: boolean;
 }
 
-export class UserLoginPage extends React.Component{
+export class AdministratorLoginPage extends React.Component{
 
-    state: UserLoginPageState;
+    state: AdministratorLoginPageState;
 
     constructor(props: Readonly<{}>){
         super(props);
 
         this.state = {
-            email: '',
+            username: '',
             password: '',
             errorMessage: '',
             isLoggedIn: false
@@ -53,9 +53,9 @@ export class UserLoginPage extends React.Component{
 
     private doLogin(){
 
-        api('auth/user/login',
+        api('auth/administrator/login',
         'post',{
-            email: this.state.email,
+            username: this.state.username,
             password: this.state.password
         }).then((res: ApiResponse) =>{
 
@@ -72,7 +72,7 @@ export class UserLoginPage extends React.Component{
 
                     switch (res.data.statusCode) {
                         case -3001:
-                            message = "Unknown email";
+                            message = "Unknown username";
                             break;
                         case -3002:
                             message = "Bad password";
@@ -83,9 +83,10 @@ export class UserLoginPage extends React.Component{
                     return;
                 }
 
-                saveToken(res.data.token, 'user');
-                saveRefreshToken(res.data.refreshToken, 'user');
-
+                saveToken(res.data.token, 'administrator');
+                saveRefreshToken(res.data.refreshToken, 'administrator');
+                saveId(res.data.id, 'administrator');
+                
                 this.setLogginState(true);
             }
         });
@@ -94,20 +95,20 @@ export class UserLoginPage extends React.Component{
     render() {
         if(this.state.isLoggedIn){
             return (
-                <Redirect to="/" />
+                <Redirect to="/administrator/dashboard" />
             );
         }
     return (
         <Container>
             <RoledMainMenu role='visitor'/>
             <Card bg="dark" text="light">
-                <Card.Header><FontAwesomeIcon icon={faSignInAlt}></FontAwesomeIcon> Logg in</Card.Header>
+                <Card.Header><FontAwesomeIcon icon={faSignInAlt}></FontAwesomeIcon>Administrator Logg in</Card.Header>
                 <Card.Body>
                    <Col md={ {span: 6, offset: 3} }>
                        <Form>
                            <Form.Group>
-                               <Form.Label htmlFor="email">E-mail</Form.Label>
-                               <Form.Control type='email' id='email' value={this.state.email} onChange={(event: any) => this.formInputChanged(event)}></Form.Control>
+                               <Form.Label htmlFor="username">Username</Form.Label>
+                               <Form.Control type='text' id='username' value={this.state.username} onChange={(event: any) => this.formInputChanged(event)}></Form.Control>
                            </Form.Group>
                            <Form.Group>
                                <Form.Label htmlFor="password">Password</Form.Label>
@@ -125,5 +126,3 @@ export class UserLoginPage extends React.Component{
     );
     }
 }
-
-    
