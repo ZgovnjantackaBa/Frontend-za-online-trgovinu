@@ -289,7 +289,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
 
     private getCatData(){
        
-        api('api/category/' + this.props.match.params.id, 'get', {}).then((res: ApiResponse) =>{
+        api('api/category/' + this.props.match.params.id, 'get', {}, 'user').then((res: ApiResponse) =>{
 
             if(res.status === 'login' || res.status === 'error'){ return this.setLogginState(false); }
             
@@ -297,6 +297,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                 categoryId: res.data.categoryId,
                 name: res.data.name
             }
+            console.log(categoryData);
         
             this.setCategoryData(categoryData);
 
@@ -313,6 +314,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
 
                 this.setSubcategories(subcategories);
             }    
+            console.log(subcategories);
         });     
 
         const orderParts = this.state.filters.order.split(' ');

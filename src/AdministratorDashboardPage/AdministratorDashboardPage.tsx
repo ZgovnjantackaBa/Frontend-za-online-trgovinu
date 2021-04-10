@@ -3,9 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Card, CardImg, Container, Row } from "react-bootstrap";
 import { Link, Redirect } from "react-router-dom";
-import { idText } from "typescript";
 import api, { ApiResponse, getId } from "../api/api";
-import { ApiConfig } from "../config/ApiConfig";
 import RoledMainMenu from "../RoledMainMenu/RoledMainMenu";
 
 interface AdministratorDashboardPageState {
@@ -96,9 +94,9 @@ export class AdministratorDashboardPage extends React.Component {
                 </Card>
                 <Card.Text>Your id is {this.state.id}</Card.Text>
                 <ul>
-                    <li style={{color: '#dc0001'}}><Link style={{color: '#dc0001'}} to='/administrator/dashboard/category'>Category</Link></li>
-                    <li style={{color: '#2f54ff'}}><Link style={{color: '#2f54ff'}} to='/administrator/dashboard/Article'>Article</Link></li>
-                    <li style={{color: 'white'}}><Link style={{color: 'white'}} to='/administrator/dashboard/feature'>Feature</Link></li>
+                    <li style={{color: '#dc0001'}}><Link style={{color: '#dc0001'}} to='/administrator/dashboard/category'>Categorys</Link></li>
+                    <li style={{color: '#2f54ff'}}><Link style={{color: '#2f54ff'}} to='/administrator/dashboard/Article'>Articles</Link></li>
+                    <li style={{color: 'white'}}><Link style={{color: 'white'}} to='/administrator/dashboard/order'>Orders</Link></li>
                     <li style={{color: 'white'}}><Link style={{color: 'white'}} to='/administrator/dashboard/get_reverse_shell'> Get hacked</Link></li>
                 </ul>
             </Card.Body>

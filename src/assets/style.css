@@ -1,0 +1,21 @@
+.image-hover {
+    padding: 0px;
+}
+
+.image-hover:hover {
+    border: 5px solid white;
+    padding: 5px;
+}
+
+.cursor-change:hover {
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.btn-center {
+    align-items: center;
+}

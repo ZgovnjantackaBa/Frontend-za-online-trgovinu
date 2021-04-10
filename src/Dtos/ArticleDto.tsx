@@ -1,40 +1,40 @@
-export default class ArticleType{
-    articleId?: number;
-    name?: string;
-    excerpt?: string;
-    description?: string;
-    imageUrl?: string | undefined;
-    price?: number;
+export default interface ArticleDto{
+    articleId: number;
+    name: string;
+    except: string;
+    description: string;
+    imageUrl: string;
+    price: number;
 
-    categoryId?: number;
-    status?: 'avalible' | 'visible' | 'hidden';
-    isPromoted?: number;
+    categoryId: number;
+    status: 'avalible' | 'visible' | 'hidden';
+    isPromoted: number;
 
-    category?: {
+    category: {
         categoryId: number;
         name: string;
         imagePath: string;
         parentCategoryId: number;
     };
 
-    articleFeatures?: {
+    articleFeatures: {
         articleFeatureId: number;
         articleId: number;
         featureId: number;
         value: string;
     }[];
 
-    features?: {
+    features: {
         featureId: number;
         name: string;
     }[];
 
-    articlePrices?: {
+    articlePrices: {
         articlePriceid: number;
         price: number;
     }[];
 
-    photos?: {
+    photos: {
         photoId: number;
         imagePath: string;
     }[];

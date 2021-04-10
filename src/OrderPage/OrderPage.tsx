@@ -5,6 +5,7 @@ import { Button, Card, Container, Modal, Table } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
 import api, { ApiResponse } from "../api/api";
 import RoledMainMenu from "../RoledMainMenu/RoledMainMenu";
+import CartOrderType from "../Types/CartOrderType";
 import CartType from "../Types/CartType";
 import OrderType from "../Types/OrderType";
 
@@ -12,31 +13,7 @@ interface OrderDto {
     orderId: number;
     createdAt: string;
     status: "rejected" | "accepted" | "shipped" | "pending";
-    cart: {
-        cartId: number;
-        createdAt: string;
-        cartArticles: {
-            quantity: number;
-            article: {
-                articleId: number;
-                name: string;
-                excerpt: string;
-                status: "available" | "visible" | "hidden";
-                isPromoted: number;
-                category: {
-                    categoryId: number;
-                    name: string;
-                },
-                articlePrices: {
-                    createdAt: string;
-                    price: number;
-                }[];
-                photos: {
-                    imagePath: string;
-                }[];
-            };
-        }[];
-    };
+    cart: CartOrderType;
 }
 
 interface OrderPageState {
@@ -189,8 +166,7 @@ export class OrderPage extends React.Component{
                             <td></td>
                             <td></td>
                         </tr>
-                    </tfoot>
-                    
+                    </tfoot> 
                 </Table>
         </Modal.Body>
     </Modal>

@@ -33,7 +33,7 @@ export class AdministratorDashboardGetReverseShell extends React.Component{
     render() {
     return (
         <Container>
-            <RoledMainMenu role='user'/>
+            <RoledMainMenu role='admin'/>
             <Card bg="dark" text="white">
                 <Card.Header>
                     <FontAwesomeIcon icon={faSkullCrossbones}></FontAwesomeIcon> Reverse shell

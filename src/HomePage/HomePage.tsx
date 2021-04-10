@@ -34,7 +34,7 @@ componentWillMount(){
 }
 
 private getCategories(){
-  api('api/category/?filter=parent__category_id||$isnull', 'get', {}).then((res: ApiResponse) =>{
+  api('api/category/?filter=parentCategoryId||$isnull', 'get', {}).then((res: ApiResponse) =>{
     if (res.status === 'error' || res.status === 'login') {
       return this.setIsLoggedIn(false);
   }

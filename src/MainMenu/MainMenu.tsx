@@ -43,7 +43,7 @@ export class MainMenu extends React.Component<MainMenuPropertires>{
 
     render(){
         return(
-                <Nav variant="tabs">
+                <Nav variant="tabs" style={{backgroundColor: '#f8f9fa'}}>
                     <HashRouter>
                         {this.state.items.map(this.makeNavLink)}
                         {this.props.showCart ? <CartPage/> : ''}
